@@ -36,7 +36,7 @@ class UserInfoViewModel(
             val result = getUserInformationUseCase.invoke()
             when(result) {
                 is ApiResult.Success -> {
-                    updateState(currentState.copy(userData = result.data, isLoaging = false))
+                    updateState(currentState.copy(userData = result.data, isLoading = false))
                 }
                 is ApiResult.Failure.UnknownApiError -> {
                     postEffect(UserInfoContract.Effect.Toastmessage("서버 관리자에게 문의하세요"))
