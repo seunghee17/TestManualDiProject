@@ -1,4 +1,3 @@
 package com.example.testexampleproject.data.model
 
-class UserInformation {
-}
+class UserModel : ArrayList<UserModelItem>()
