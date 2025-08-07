@@ -1,5 +1,6 @@
 package com.example.testexampleproject.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.testexampleproject.cmm.BaseViewModel
 import com.example.testexampleproject.data.network.adapter.ApiResult
@@ -13,20 +14,20 @@ class UserInfoViewModel(
     initialState = UserInfoContract.State()
 ) {
 
-    init {
-        viewModelScope.launch {
-            getUserList()
-        }
-    }
+//    init {
+//        viewModelScope.launch {
+//            getUserList()
+//        }
+//    }
 
     override fun reduceState(event: UserInfoContract.Event) {
         when(event) {
             is UserInfoContract.Event.GetUserDetailEvent-> {
                 viewModelScope.launch {
                     //사용자 상세 조회
+                    getUserList()
                 }
             }
-            else ->{}
         }
     }
 
@@ -37,6 +38,7 @@ class UserInfoViewModel(
             when(result) {
                 is ApiResult.Success -> {
                     updateState(currentState.copy(userData = result.data, isLoading = false))
+                    Log.d("TTTAG", "${result.data} && ${currentState.userData}")
                 }
                 is ApiResult.Failure.UnknownApiError -> {
                     postEffect(UserInfoContract.Effect.Toastmessage("서버 관리자에게 문의하세요"))

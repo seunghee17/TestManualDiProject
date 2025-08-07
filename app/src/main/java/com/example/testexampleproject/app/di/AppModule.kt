@@ -1,11 +1,10 @@
 package com.example.testexampleproject.app.di
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.testexampleproject.presentation.viewmodel.UserInfoViewModel
 
-class AppModule (private val context: Context) {
+class AppModule () {
     private val networkModule = NetworkModule()
 
     private val repositoryModule = RepositoryModule(authService = networkModule.authService)

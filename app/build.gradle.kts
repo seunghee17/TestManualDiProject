@@ -64,4 +64,7 @@ dependencies {
     //okHttp
     implementation (libs.okhttp)
 
+    //Jetpack Navigation3
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+
 }

@@ -3,6 +3,10 @@ package com.example.testexampleproject.presentation.screen
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,7 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
-fun UserInfoScreen(
+fun ScreenA(
     viewModel: UserInfoViewModel,
     navHostController: NavHostController
 ) {
@@ -31,7 +35,9 @@ fun UserInfoScreen(
                 is UserInfoContract.Effect.Toastmessage -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
-                else->{}
+                is UserInfoContract.Effect.NavigateTo -> {
+                    navHostController.navigate(effect.destination, effect.navOptions)
+                }
             }
         }
     }
@@ -40,23 +46,20 @@ fun UserInfoScreen(
         Column (
             modifier = Modifier.fillMaxSize()
         ) {
-            if(uiState.isLoading) {
-                loadingScreen(
-                    modifier = Modifier
-                )
-            } else {
-
-            }
+            Text(text = "welcome to test app Good Luck!")
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                onClick = {
+                    viewModel.setEffect {
+                        UserInfoContract.Effect.NavigateTo(destination = "UserInfoScreen")
+                    }
+                    viewModel.setEvent(event = UserInfoContract.Event.GetUserDetailEvent)
+                },
+                content = { Text(text = "click here") }
+            )
         }
     }
 
-}
-
-@Composable
-fun loadingScreen(modifier: Modifier) {
-    Column(
-        modifier = modifier
-    ) {
-
-    }
 }
