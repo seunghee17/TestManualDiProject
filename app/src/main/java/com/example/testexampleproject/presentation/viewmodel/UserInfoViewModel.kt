@@ -14,11 +14,6 @@ class UserInfoViewModel(
     initialState = UserInfoContract.State()
 ) {
 
-//    init {
-//        viewModelScope.launch {
-//            getUserList()
-//        }
-//    }
 
     override fun reduceState(event: UserInfoContract.Event) {
         when(event) {
@@ -33,24 +28,22 @@ class UserInfoViewModel(
 
 //여기서 viewmodel scope 해서 코루틴 시작하면 reducestate에서 비동기처리 되는지..?
     private suspend fun getUserList() {
-        viewModelScope.launch {
-            val result = getUserInformationUseCase.invoke()
-            when(result) {
-                is ApiResult.Success -> {
-                    updateState(currentState.copy(userData = result.data, isLoading = false))
-                    Log.d("TTTAG", "${result.data} && ${currentState.userData}")
-                }
-                is ApiResult.Failure.UnknownApiError -> {
-                    postEffect(UserInfoContract.Effect.Toastmessage("서버 관리자에게 문의하세요"))
-                }
-                is ApiResult.Failure.NetworkError -> {
-                    postEffect(UserInfoContract.Effect.Toastmessage("네트워크 연결 확인해주세요."))
-                }
-                is ApiResult.Failure.HttpError -> {
-                    postEffect(UserInfoContract.Effect.Toastmessage("Http 오류가 발생했습니다"))
-                }
-            }
+    val result = getUserInformationUseCase.invoke()
+    when(result) {
+        is ApiResult.Success -> {
+            updateState(currentState.copy(userData = result.data, isLoading = false))
+            Log.d("TTTAG", "${result.data} && ${currentState.userData}")
         }
+        is ApiResult.Failure.UnknownApiError -> {
+            postEffect(UserInfoContract.Effect.Toastmessage("서버 관리자에게 문의하세요"))
+        }
+        is ApiResult.Failure.NetworkError -> {
+            postEffect(UserInfoContract.Effect.Toastmessage("네트워크 연결 확인해주세요."))
+        }
+        is ApiResult.Failure.HttpError -> {
+            postEffect(UserInfoContract.Effect.Toastmessage("Http 오류가 발생했습니다"))
+        }
+    }
     }
 
 }
